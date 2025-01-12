@@ -5,7 +5,7 @@ namespace REST_API.Requests
     public class AccountRequest
     {
 
-        public string AccountHolder { get; set; }
+        public string AccountName { get; set; }
        
     }
 }
