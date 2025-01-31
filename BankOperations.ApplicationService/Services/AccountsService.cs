@@ -4,7 +4,8 @@ using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
 using BankOperations.Context.Repositories;
-using BankOperations.Infrastructure.Entities;
+using BankOperations.Shared.Models;
+
 
 namespace BankOperations.ApplicationService.Services
 {

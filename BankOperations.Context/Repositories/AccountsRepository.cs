@@ -2,6 +2,7 @@
 using BankOperations.Infrastructure.Entities;
 using CsvHelper;
 using CsvHelper.Configuration;
+using BankOperations.Shared.Account;
 
 namespace BankOperations.Context.Repositories
 {
