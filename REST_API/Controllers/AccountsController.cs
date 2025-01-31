@@ -1,6 +1,6 @@
-﻿using BankOperations.ApplicationService.Services;
-using BankOperations.Context.Repositories;
-using BankOperations.Infrastructure.Entities;
+﻿//using BankOperations.ApplicationService.Services;
+//using BankOperations.Context.Repositories;
+//using BankOperations.Infrastructure.Entities;
 using Microsoft.AspNetCore.Mvc;
 using REST_API.Requests;
 using REST_API.Response;
@@ -36,7 +36,7 @@ namespace REST_API.Controllers
         [HttpPost()]
         public string CreateAccount([FromBody] AccountRequest accountRequest)
         {
-            AccountsService.CreateAccount(accountRequest);
+            object value = AccountsService.CreateAccount(accountRequest);
 
             return "New Account Created";
         }
