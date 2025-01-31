@@ -56,5 +56,51 @@ namespace BankOperations.Context.Repositories
                 }
             }
         }
+
+        public static AccountEntity GetAccount(int id)
+        {
+            if (File.Exists("accounts.csv"))
+            {
+                using (var reader = new StreamReader("accounts.csv"))
+                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                {
+                    var records = csv.GetRecords<AccountEntity>();
+                    var record = records.FirstOrDefault(account => account.Id == id);
+
+                    if (record != null)
+                    {
+                        return record;
+                    }
+
+                    return new AccountEntity();
+                }
+            }
+
+            return new AccountEntity();
+        }
+
+        public static void UpdateAccount(AccountEntity record)
+        {
+            if (File.Exists("accounts.csv"))
+            {
+                var records = new List<AccountEntity> ();
+                using (var reader = new StreamReader("accounts.csv"))
+                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                {
+                    records = csv.GetRecords<AccountEntity>().ToList();
+                    var index = records.FindIndex(account => account.Id == record.Id);
+
+                    if (index != -1)
+                    {
+                        records[index] = record;
+                    }
+
+                }
+
+                using var writer = new StreamWriter("accounts.csv");
+                using var csv2 = new CsvWriter(writer, CultureInfo.InvariantCulture);
+                csv2.WriteRecords(records);
+            }
+        }
     }
 }

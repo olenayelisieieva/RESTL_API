@@ -30,20 +30,24 @@ namespace REST_API.Controllers
 
             var response = new AccounResponse()
             {
-                AccountId = Guid.NewGuid(),
-                Name = "TestName",
+               Id = 123,
             };
             return response;
         }
 
 
         [HttpPost()]
-        public string CreateAccount([FromBody] AccountRequest accountRequest)
+        public AccounResponse CreateAccount([FromBody] AccountRequest accountRequest)
         {
 
-            AccountsService.CreateAccount(accountRequest);
+            var accountId = AccountsService.CreateAccount(accountRequest);
 
-            return "New Account Created";
+            var response = new AccounResponse()
+            {
+                Id = accountId
+            };
+
+            return response;
         }
 
 
@@ -51,6 +55,8 @@ namespace REST_API.Controllers
         [HttpPut("{id}")]
         public string Put(int id, [FromBody] AccountRequest accountRequest)
         {
+            AccountsService.UpdateAccount(id, accountRequest);
+
             return $" Account Updated";
         }
 

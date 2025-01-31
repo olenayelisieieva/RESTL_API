@@ -6,7 +6,7 @@ namespace BankOperations.ApplicationService.Services
 {
     public static class AccountsService
     {
-        public static void CreateAccount(AccountRequest accountRequest)
+        public static int CreateAccount(AccountRequest accountRequest)
         {
 
             var entity = new AccountEntity()
@@ -20,6 +20,16 @@ namespace BankOperations.ApplicationService.Services
             var records = new List<AccountEntity>() { entity };
 
             AccountsRepository.AddAccount(records);
+
+            return entity.Id;
+        }
+
+        public static void UpdateAccount(int id, AccountRequest accountRequest)
+        {
+            var record = AccountsRepository.GetAccount(id);
+            record.AccountName = accountRequest.AccountName;
+            AccountsRepository.UpdateAccount(record);
+
         }
 
         private static int GetNextId()
