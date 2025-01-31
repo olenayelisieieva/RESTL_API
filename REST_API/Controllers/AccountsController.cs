@@ -1,8 +1,8 @@
-﻿//using BankOperations.ApplicationService.Services;
-//using BankOperations.Context.Repositories;
-//using BankOperations.Infrastructure.Entities;
+﻿using BankOperations.ApplicationService.Services;
+using BankOperations.Context.Repositories;
+using BankOperations.Infrastructure.Entities;
+using BankOperations.Shared.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
-using REST_API.Requests;
 using REST_API.Response;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
@@ -17,6 +17,8 @@ namespace REST_API.Controllers
         [HttpGet]
         public IEnumerable<string> GetAllAccounts()
         {
+
+            // TODO: Подключить сервис
             return new string[] { "value1", "value2" };
         }
 
@@ -24,6 +26,8 @@ namespace REST_API.Controllers
         [HttpGet("{id}")]
         public AccounResponse GetAccountById([FromRoute] int id)
         {
+            // TODO: Подключить сервис
+
             var response = new AccounResponse()
             {
                 AccountId = Guid.NewGuid(),
@@ -36,20 +40,12 @@ namespace REST_API.Controllers
         [HttpPost()]
         public string CreateAccount([FromBody] AccountRequest accountRequest)
         {
-            object value = AccountsService.CreateAccount(accountRequest);
+
+            AccountsService.CreateAccount(accountRequest);
 
             return "New Account Created";
         }
 
-
-        [HttpPost("{id}")]
-        public string GetAccountsByFilters(
-            [FromQuery] string[] accountNames,
-            [FromBody] AccountRequest accountRequest,
-            [FromRoute] int id)
-        {
-            return $"New Account  Created";
-        }
 
         // PUT api/<AccountsController>/5
         [HttpPut("{id}")]
@@ -62,6 +58,8 @@ namespace REST_API.Controllers
         [HttpDelete("{id}")]
         public string Delete(int id)
         {
+
+            // TODO: подключить сервис
             return "Account deleted";
         }
     }

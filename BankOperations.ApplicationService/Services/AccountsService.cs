@@ -1,11 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using BankOperations.Context.Repositories;
-using BankOperations.Shared.Models;
-
+﻿using BankOperations.Context.Repositories;
+using BankOperations.Infrastructure.Entities;
+using BankOperations.Shared.Models.Requests;
 
 namespace BankOperations.ApplicationService.Services
 {
@@ -14,9 +9,23 @@ namespace BankOperations.ApplicationService.Services
         public static void CreateAccount(AccountRequest accountRequest)
         {
 
-            var records = new List<AccountEntity>() { };
+            var entity = new AccountEntity()
+            {
+                Id = GetNextId(),
+                AccountId = Guid.NewGuid(),
+                AccountName = accountRequest.AccountName,
+                Balance = 0
+            };
+
+            var records = new List<AccountEntity>() { entity };
 
             AccountsRepository.AddAccount(records);
+        }
+
+        private static int GetNextId()
+        {
+            var currentId = AccountsRepository.GetLastId();
+            return currentId + 1;
         }
     }
 }

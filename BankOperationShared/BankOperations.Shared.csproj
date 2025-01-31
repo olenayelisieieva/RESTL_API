@@ -8,8 +8,8 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="Models\" />
     <Folder Include="Account\" />
+    <Folder Include="Models\Entites\" />
   </ItemGroup>
 
 </Project>

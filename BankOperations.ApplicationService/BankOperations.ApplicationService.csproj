@@ -13,6 +13,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\BankOperations.Context\BankOperations.Infrastructure.csproj" />
+    <ProjectReference Include="..\BankOperationShared\BankOperations.Shared.csproj" />
   </ItemGroup>
 
 </Project>

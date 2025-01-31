@@ -2,12 +2,34 @@
 using BankOperations.Infrastructure.Entities;
 using CsvHelper;
 using CsvHelper.Configuration;
-using BankOperations.Shared.Account;
 
 namespace BankOperations.Context.Repositories
 {
     public static class AccountsRepository
     {
+        public static int GetLastId()
+        {
+            if (File.Exists("accounts.csv"))
+            {
+                using (var reader = new StreamReader("accounts.csv"))
+                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                {
+                    var records = csv.GetRecords<AccountEntity>();
+                    var lastRecord = records.LastOrDefault();
+
+                    if (lastRecord != null) 
+                    { 
+                        return lastRecord.Id;   
+                    }
+
+                    return 0;
+                }
+            }
+
+            return 0;
+        }
+
+
         public static void AddAccount(List<AccountEntity> records)
         {
             if (File.Exists("accounts.csv"))

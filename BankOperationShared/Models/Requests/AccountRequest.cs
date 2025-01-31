@@ -1,11 +1,11 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace REST_API.Requests
+namespace BankOperations.Shared.Models.Requests
 {
     public class AccountRequest
     {
 
         public string AccountName { get; set; }
-       
+
     }
 }
