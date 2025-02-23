@@ -17,9 +17,9 @@ namespace BankOperations.Context.Repositories
                     var records = csv.GetRecords<AccountEntity>();
                     var lastRecord = records.LastOrDefault();
 
-                    if (lastRecord != null) 
-                    { 
-                        return lastRecord.Id;   
+                    if (lastRecord != null)
+                    {
+                        return lastRecord.Id;
                     }
 
                     return 0;
@@ -83,7 +83,7 @@ namespace BankOperations.Context.Repositories
         {
             if (File.Exists("accounts.csv"))
             {
-                var records = new List<AccountEntity> ();
+                var records = new List<AccountEntity>();
                 using (var reader = new StreamReader("accounts.csv"))
                 using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
                 {
@@ -102,5 +102,38 @@ namespace BankOperations.Context.Repositories
                 csv2.WriteRecords(records);
             }
         }
+
+        public static List<AccountEntity> _accounts = new List<AccountEntity>();
+
+        public static IEnumerable<AccountEntity> GetAllAccounts()
+        {
+            return _accounts;
+        }
+
+        public static bool DeleteAccount(int id)
+        { 
+
+            var records = new List<AccountEntity>();
+            using (var reader = new StreamReader("accounts.csv"))
+            using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+
+            {
+                records = csv.GetRecords<AccountEntity>().ToList();
+            }
+            var recordToRemove = records.FirstOrDefault(a => a.Id == id);
+            if (recordToRemove == null) return false;
+
+            records.Remove(recordToRemove);
+
+            using var writer = new StreamWriter("accounts.csv");
+            using var csv2 = new CsvWriter(writer, CultureInfo.InvariantCulture);
+            {
+                csv2.WriteRecords(records);
+            }
+
+            return true;
+
+        }
+
     }
 }

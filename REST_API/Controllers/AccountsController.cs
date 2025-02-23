@@ -17,23 +17,22 @@ namespace REST_API.Controllers
         [HttpGet]
         public IEnumerable<string> GetAllAccounts()
         {
+            var accounts = AccountsService.GetAllAccounts();
 
-            // TODO: Подключить сервис
-            return new string[] { "value1", "value2" };
+            if (accounts == null || !accounts.Any())
+            {
+                return null;
+            }
+
+
+            return new string[] { "OK" };
+        
+            //return new string[] { "OK" };
         }
 
         // GET api/<AccountsController>/5
         [HttpGet("{id}")]
-        public AccounResponse GetAccountById([FromRoute] int id)
-        {
-            // TODO: Подключить сервис
-
-            var response = new AccounResponse()
-            {
-               Id = 123,
-            };
-            return response;
-        }
+      
 
 
         [HttpPost()]
@@ -62,11 +61,15 @@ namespace REST_API.Controllers
 
         // DELETE api/<AccountsController>/5
         [HttpDelete("{id}")]
-        public string Delete(int id)
+        
+           public IActionResult DeleteAccount(int id)
         {
-
-            // TODO: подключить сервис
-            return "Account deleted";
+            bool deleted = AccountsRepository.DeleteAccount(id);
+            if (!deleted)
+            {
+                return NotFound($"Аккаунт с ID {id} не найден.");
+            }
+            return NoContent();
         }
     }
 }

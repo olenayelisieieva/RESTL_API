@@ -37,5 +37,22 @@ namespace BankOperations.ApplicationService.Services
             var currentId = AccountsRepository.GetLastId();
             return currentId + 1;
         }
+
+        public static IEnumerable<AccountEntity> GetAllAccounts()
+        {
+            return AccountsRepository.GetAllAccounts();
+        }
+
+        //public static IEnumerable<AccountEntity> GetAccountById()
+        // {
+        //  return GetAllAccounts().FirstOrDefault(a => a.Id == id);
+        // }
+
+       // public static IEnumerable<AccountEntity> DeleteAccounts(int id)
+        //{ 
+            //return AccountsRepository.DeleteAccount(id);
+       // }
+
+
     }
 }
