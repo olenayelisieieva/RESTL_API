@@ -1,6 +1,5 @@
-﻿using BankOperations.ApplicationService.Services;
-using BankOperations.Context.Repositories;
-using BankOperations.Infrastructure.Entities;
+﻿using BankOperations.API.Controllers.services;
+using BankOperations.ApplicationService.Services;
 using BankOperations.Shared.Models.Requests;
 using Microsoft.AspNetCore.Mvc;
 using REST_API.Response;
@@ -13,58 +12,110 @@ namespace REST_API.Controllers
     [ApiController]
     public class AccountsController : ControllerBase
     {
+        private readonly AccountsService _accountsService;
+
+
+        private readonly ScopedService _scoped;
+        private readonly TransientService _transietn;
+        private readonly SingletonService _singleton;
+
+        public AccountsController(
+            AccountsService accountsService,
+            ScopedService scoped,
+            TransientService transietn,
+            SingletonService singleton)
+        {
+            _accountsService = accountsService;
+            _scoped = scoped;
+            _transietn = transietn;
+            _singleton = singleton;
+        }
+
+
+
+
         // GET: api/<AccountsController>
         [HttpGet]
-        public IEnumerable<string> GetAllAccounts()
+        public ActionResult<IEnumerable<AccountResponse>> GetAllAccounts()
         {
-            var accounts = AccountsService.GetAllAccounts();
+            var accounts = _accountsService.GetAllAccounts();
 
             if (accounts == null || !accounts.Any())
             {
-                return null;
+                return BadRequest();
+            }
+
+            var response = new List<AccountResponse>();
+
+            foreach (var item in accounts)
+            {
+                var accountResponse = new AccountResponse()
+                {
+                    AccountName = item.Name,
+                    Id = item.Id,
+                };
+
+                response.Add(accountResponse);
             }
 
 
-            return new string[] { "OK" };
-        
-            //return new string[] { "OK" };
+            return Ok(response);
         }
 
         // GET api/<AccountsController>/5
         [HttpGet("{id}")]
+        public ActionResult<AccountResponse> GetById([FromRoute]int id) 
+        {
+            var account = _accountsService.GetAccountById(id);
+
+            var response = new AccountResponse()
+            {
+                AccountName = account.Name,
+                Id = account.Id
+            };
+
+            return Ok(response);
+        }
       
 
 
         [HttpPost()]
-        public AccounResponse CreateAccount([FromBody] AccountRequest accountRequest)
+        public ActionResult<AccountResponse> CreateAccount([FromBody] AccountRequest accountRequest)
         {
+            Console.WriteLine("START OF REQUEST");
+            Console.WriteLine("SCOPED: " + _scoped.CurrentGuid.ToString());
+            Console.WriteLine("TRANSIENT: " + _transietn.CurrentGuid.ToString());
+            Console.WriteLine("SINGLETON: " + _singleton.CurrentGuid.ToString());
 
-            var accountId = AccountsService.CreateAccount(accountRequest);
 
-            var response = new AccounResponse()
+            var accountId = _accountsService.CreateAccount(accountRequest);
+
+            var response = new AccountResponse()
             {
-                Id = accountId
+                Id = accountId,
+                AccountName = accountRequest.AccountName
+              
             };
-
-            return response;
+            Console.WriteLine("END OF REQUEST");
+            Console.WriteLine();
+            return Ok(response);
         }
 
 
         // PUT api/<AccountsController>/5
         [HttpPut("{id}")]
-        public string Put(int id, [FromBody] AccountRequest accountRequest)
+        public ActionResult Put(int id, [FromBody] AccountRequest accountRequest)
         {
-            AccountsService.UpdateAccount(id, accountRequest);
-
-            return $" Account Updated";
+            _accountsService.UpdateAccount(id, accountRequest);
+           
+            return NoContent();
         }
 
         // DELETE api/<AccountsController>/5
         [HttpDelete("{id}")]
-        
-           public IActionResult DeleteAccount(int id)
+        public ActionResult DeleteAccount(int id)
         {
-            bool deleted = AccountsRepository.DeleteAccount(id);
+            bool deleted = _accountsService.DeleteAccount(id);
             if (!deleted)
             {
                 return NotFound($"Аккаунт с ID {id} не найден.");

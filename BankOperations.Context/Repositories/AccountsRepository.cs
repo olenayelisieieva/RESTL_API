@@ -5,9 +5,9 @@ using CsvHelper.Configuration;
 
 namespace BankOperations.Context.Repositories
 {
-    public static class AccountsRepository
+    public class AccountsRepository
     {
-        public static int GetLastId()
+        public int GetLastId()
         {
             if (File.Exists("accounts.csv"))
             {
@@ -30,7 +30,7 @@ namespace BankOperations.Context.Repositories
         }
 
 
-        public static void AddAccount(List<AccountEntity> records)
+        public void AddAccount(List<AccountEntity> records)
         {
             if (File.Exists("accounts.csv"))
             {
@@ -57,7 +57,7 @@ namespace BankOperations.Context.Repositories
             }
         }
 
-        public static AccountEntity GetAccount(int id)
+        public AccountEntity GetAccount(int id)
         {
             if (File.Exists("accounts.csv"))
             {
@@ -79,7 +79,7 @@ namespace BankOperations.Context.Repositories
             return new AccountEntity();
         }
 
-        public static void UpdateAccount(AccountEntity record)
+        public void UpdateAccount(AccountEntity record)
         {
             if (File.Exists("accounts.csv"))
             {
@@ -103,14 +103,30 @@ namespace BankOperations.Context.Repositories
             }
         }
 
-        public static List<AccountEntity> _accounts = new List<AccountEntity>();
+        public List<AccountEntity> _accounts = new List<AccountEntity>();
 
-        public static IEnumerable<AccountEntity> GetAllAccounts()
+        public IEnumerable<AccountEntity> GetAllAccounts()
         {
-            return _accounts;
+            var result = new List<AccountEntity>();
+            if (File.Exists("accounts.csv"))
+            {
+                using (var reader = new StreamReader("accounts.csv"))
+                using (var csv = new CsvReader(reader, CultureInfo.InvariantCulture))
+                {
+                    var records = csv.GetRecords<AccountEntity>().ToList();
+
+                    if (records != null)
+                    {
+                        result = records;
+                    }
+
+                }
+            }
+
+            return result;
         }
 
-        public static bool DeleteAccount(int id)
+        public bool DeleteAccount(int id)
         { 
 
             var records = new List<AccountEntity>();

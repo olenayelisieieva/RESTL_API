@@ -1,7 +1,8 @@
 ﻿namespace REST_API.Response
 {
-    public class AccounResponse
+    public class AccountResponse
     {
         public int Id { get; set; }
+        public string AccountName { get; set; }
     }
 }
